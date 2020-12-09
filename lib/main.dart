@@ -29,7 +29,7 @@ class _MyAppState extends State<MyApp> {
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-       title: 'Iz',
+       title: 'Izinga',
       theme: ThemeData(
         fontFamily: 'Fira Sans',
         primarySwatch: Colors.blue,
