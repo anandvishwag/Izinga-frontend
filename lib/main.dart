@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'profile-Discover-maches/profile-Info.dart';
+//import 'profile-Discover-maches/profile-Info.dart';
 
-//import 'login/setting.dart';
+import 'login/setting.dart';
 
 //import 'login/profile-media.dart';
 
@@ -18,6 +18,7 @@ import 'profile-Discover-maches/profile-Info.dart';
 void main() {
   runApp(MyApp());
 }
+
 class MyApp extends StatefulWidget {
   @override
   _MyAppState createState() => _MyAppState();
@@ -26,24 +27,23 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-       title: 'Izinga',
+      title: 'Izinga',
       theme: ThemeData(
         fontFamily: 'Fira Sans',
         primarySwatch: Colors.blue,
         backgroundColor: Colors.white,
       ),
-             home:ProfileInfo(),
-             
-             //SettingProfile(),
-             //ProfileMedia(),
-             //ProfileBio(),
-             //WhoAreYou(),
-             //StartLogin(),
-            //  VeryfyNumber(),
+      home: SettingProfile(),
+      // ProfileInfo()
+      //SettingProfile(),
+      //ProfileMedia(),
+      //ProfileBio(),
+      //WhoAreYou(),
+      //StartLogin(),
+      //  VeryfyNumber(),
 //welcomeScreen()
-          );
+    );
   }
 }
