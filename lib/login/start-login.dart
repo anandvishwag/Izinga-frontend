@@ -42,7 +42,7 @@ Container(
           ),
           TextSpan(
 
-            text: 'Terms of Service new pramod Kumar Yadav New',
+            text: 'Terms of Service new pramod Kumar Yadav New Rahul pal',
           
           
             style: TextStyle(
