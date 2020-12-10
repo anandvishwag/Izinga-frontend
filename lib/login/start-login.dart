@@ -38,7 +38,7 @@ Container(
         ),
         children: [
           TextSpan(
-            text: 'By tapping Log In, you agree with our nwee',
+            text: 'By tapping Log In, you agree with our new text added',
           ),
           TextSpan(
 
