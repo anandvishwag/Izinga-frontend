@@ -42,9 +42,9 @@ Container(
           ),
           TextSpan(
 
-            text: 'Terms of Service new pramod Kumar'
-            text: 'Terms of Service',
-            main
+            text: 'Terms of Service new pramod Kumar Yadav',
+          
+          
             style: TextStyle(
               decoration: TextDecoration.underline,
             ),
