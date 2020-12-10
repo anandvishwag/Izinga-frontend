@@ -38,10 +38,10 @@ Container(
         ),
         children: [
           TextSpan(
-            text: 'By tapping Log In, you agree with our new textdfgdfgdfgdfg',
+            text: 'By tapping Log In, you agree with our',
           ),
           TextSpan(
- frontdesign
+
             text: 'Terms of Service new pramod Kumar'
             text: 'Terms of Service',
             main
