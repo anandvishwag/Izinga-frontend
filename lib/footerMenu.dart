@@ -125,7 +125,7 @@ final VoidCallback onPressMenu;
          Icon(menuIcon, size:25,),
          SizedBox(height: 4,),
          Text(menuTitle, style: TextStyle(
-         fontSize:11,
+         fontSize:9,
          ),
          ),
       ],
