@@ -38,7 +38,7 @@ Container(
         ),
         children: [
           TextSpan(
-            text: 'By tapping Log In, you agree with our ',
+            text: 'By tapping Log In, you agree with our new text',
           ),
           TextSpan(
  frontdesign
