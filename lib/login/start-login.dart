@@ -38,13 +38,13 @@ Container(
         ),
         children: [
           TextSpan(
-            text: 'By tapping Log In, you agree with our nwee',
+            text: 'By tapping Log In, you agree with our nwee Pramod',
           ),
           TextSpan(
 
-            text: 'Terms of Service new pramod Kumar'
-            text: 'Terms of Service',
-            main
+            text: 'Terms of Service new pramod Kumar',
+          
+          
             style: TextStyle(
               decoration: TextDecoration.underline,
             ),
