@@ -41,7 +41,7 @@ Container(
             text: 'By tapping Log In, you agree with our ',
           ),
           TextSpan(
-            text: 'Terms of Service new text',
+            text: 'Terms of Service new pramod Kumar Yadavfghfgh',
             style: TextStyle(
               decoration: TextDecoration.underline,
             ),
