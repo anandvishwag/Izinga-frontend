@@ -17,6 +17,8 @@ class _ItsAMatchState extends State<ItsAMatch> {
 
   @override
   Widget build(BuildContext context) {
+double screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: iZwhiteG,
       body: SafeArea (
@@ -46,7 +48,7 @@ height: 200,
             child: CircleAvatar(
      backgroundImage: AssetImage('assets/img/profilePhoto-men.jpg'),
       ),
-          height: 150, width: 150,
+          height: screenWidth/2-50, width: screenWidth/2-50,
     decoration: BoxDecoration(
       borderRadius: BorderRadius.all(Radius.elliptical(9999.0, 9999.0)),
       color: const Color(0xff181819),
@@ -64,7 +66,7 @@ height: 200,
             child: CircleAvatar(
      backgroundImage: AssetImage('assets/img/profilePhoto.jpg'),
       ),
-          height: 150, width: 150,
+          height: screenWidth/2-50, width: screenWidth/2-50,
     decoration: BoxDecoration(
       borderRadius: BorderRadius.all(Radius.elliptical(9999.0, 9999.0)),
       color: const Color(0xff181819),

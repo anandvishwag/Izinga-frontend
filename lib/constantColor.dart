@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 const iZblue = Color(0xFF5258c4);
 const iZblueM = Color(0xFF7075CE);
 const iZblueL = Color(0xFF999CDC);
@@ -20,7 +19,6 @@ const iZblackL4 = Color(0xFF78797D);
 const textGray = Color(0xff8f8f8f);
 const double izDefultSpace = 25.0;
 
-
 final mobileLoginHeading =  TextStyle( 
   fontSize: 22,
     color:iZwhite,
@@ -32,8 +30,6 @@ final bull = Icon(Icons.stop_circle, size:8, color: iZblue,);
       color: iZblackL2,
     );
   
-
-
 final otpInputDecoraion = InputDecoration(
    contentPadding: EdgeInsets.only(bottom: 10, top: 10),
  enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: iZwhite, width:3,),),
