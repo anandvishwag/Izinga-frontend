@@ -17,6 +17,7 @@ const iZblackL1 = Color(0xFF3A3A3B);
 const iZblackL2 = Color(0xFF5B5B5C);
 const iZblackL3 = Color(0xFF707070);
 const iZblackL4 = Color(0xFF78797D);
+const textGray = Color(0xff8f8f8f);
 const double izDefultSpace = 25.0;
 
 
