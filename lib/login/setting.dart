@@ -4,6 +4,7 @@ import '../constantColor.dart';
 import '../defalte-Button.dart';
 import '../top-back-appbar.dart';
 import 'package:passwordfield/passwordfield.dart';
+import 'package:select_form_field/select_form_field.dart';
 
 class SettingProfile extends StatefulWidget {
   @override
@@ -13,7 +14,45 @@ class SettingProfile extends StatefulWidget {
 class _SettingProfileState extends State<SettingProfile> {
   final _formKey = GlobalKey<FormState>();
   final _formKeydiscovery = GlobalKey<FormState>();
+  TextEditingController _controller;
+  //String _initialValue;
+  String _valueChanged = '';
+  String _valueToValidate = '';
+  String _valueSaved = '';
+
+  final List<Map<String, dynamic>> _items = [
+    {
+      'value': 'male',
+      'label': 'Male',
+      'textStyle': TextStyle(color: iZblackL4),
+    },
+    {
+      'value': 'female',
+      'label': 'Female',
+      'textStyle': TextStyle(color: iZblackL4),
+    },
+    {
+      'value': 'starValue',
+      'label': 'Gender',
+      'enable': false,
+      'textStyle': TextStyle(color: iZblackL4),
+    },
+  ];
+
+  RangeValues values = RangeValues(22, 35);
+  int minage = 22;
+  int maxage = 35;
+
+  int maxdistance = 40;
+
   @override
+  void initState() {
+    super.initState();
+
+    //_initialValue = 'starValue';
+    _controller = TextEditingController(text: 'starValue');
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: iZblack,
@@ -167,21 +206,28 @@ class _SettingProfileState extends State<SettingProfile> {
                               width: 20.0,
                             ),
                             Expanded(
-                              child: TextFormField(
-                                textAlign: TextAlign.right,
-                                style: setingBoxTextStyle(),
-
+                              child: SelectFormField(
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color: iZblue,
+                                  letterSpacing: 1.04,
+                                ),
                                 decoration: InputDecoration(
-                                    hintStyle: TextStyle(color: iZgreen),
-                                    border: InputBorder.none,
-                                    hintText: 'My Current Location'),
-                                // The validator receives the text that the user has entered.
-                                validator: (value) {
-                                  if (value.isEmpty) {
-                                    return 'Please enter some text';
-                                  }
+                                  border: InputBorder.none,
+                                ),
+                                textAlign: TextAlign.right,
+                                type: SelectFormFieldType.dropdown,
+                                controller: _controller,
+                                //initialValue: _initialValue,
+                                items: _items,
+                                onChanged: (val) =>
+                                    setState(() => _valueChanged = val),
+                                validator: (val) {
+                                  setState(() => _valueToValidate = val);
                                   return null;
                                 },
+                                onSaved: (val) =>
+                                    setState(() => _valueSaved = val),
                               ),
                             )
                           ],
@@ -189,29 +235,72 @@ class _SettingProfileState extends State<SettingProfile> {
                       )
                     ])),
                 SettingBoxes(
-                  child: Text(
-                    'Ratings & Reviews',
-                    style: setingBoxTextStyle(),
-                  ),
-                ),
+                    child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(child: Text('Max Distance')),
+                        Container(
+                            alignment: Alignment.centerRight,
+                            child: Text('$maxdistance kms'))
+                      ],
+                    ),
+                    Slider(
+                      activeColor: iZblueM,
+                      inactiveColor: iZwhiteGMD,
+                      min: 0,
+                      max: 100,
+                      value: maxdistance.toDouble(),
+                      onChanged: (double newValue) {
+                        setState(() {
+                          maxdistance = newValue.round();
+                        });
+                      },
+                    ),
+                  ],
+                )),
                 SettingBoxes(
-                  child: Text(
-                    'Ratings & Reviews',
-                    style: setingBoxTextStyle(),
-                  ),
-                ),
-                SettingBoxes(
-                  child: Text(
-                    'Ratings & Reviews',
-                    style: setingBoxTextStyle(),
-                  ),
-                ),
-                SettingBoxes(
-                  child: Text(
-                    'Ratings & Reviews',
-                    style: setingBoxTextStyle(),
-                  ),
-                ),
+                    child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(child: Text('Age Range')),
+                        Container(
+                            alignment: Alignment.centerRight,
+                            child: Text('$minage - $maxage'))
+                      ],
+                    ),
+                    RangeSlider(
+                      activeColor: iZblueM,
+                      inactiveColor: iZwhiteGMD,
+                      min: 1,
+                      max: 100,
+                      values: values,
+                      divisions: 100,
+                      onChanged: (value) {
+                        setState(() {
+                          values = value;
+                          minage = value.start.toInt();
+                          maxage = value.end.toInt();
+                        });
+                      },
+                    )
+                  ],
+                )),
+                Container(
+                    width: 300,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12.0),
+                      color: iZwhite,
+                    ),
+                    child: RaisedButton(
+                      onPressed: () {},
+                      child: const Text('Enabled Button',
+                          style: TextStyle(fontSize: 20)),
+                    )),
                 Padding(
                   padding: const EdgeInsets.only(top: 10, bottom: 10),
                   child: SettingHeading(
