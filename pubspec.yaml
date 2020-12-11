@@ -32,8 +32,8 @@ dependencies:
   flutter_svg: ^0.19.1
   intl_phone_field: ^1.4.2
   carousel_slider: ^2.3.1
-  passwordfield: ^0.0.82
   select_form_field: "^1.1.0"
+  http: ^0.12.2
   
 
 dev_dependencies:

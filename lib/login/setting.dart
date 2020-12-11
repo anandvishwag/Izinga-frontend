@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../constantColor.dart';
 import '../defalte-Button.dart';
 import '../top-back-appbar.dart';
-import 'package:passwordfield/passwordfield.dart';
 import 'package:select_form_field/select_form_field.dart';
 
 class SettingProfile extends StatefulWidget {
@@ -19,7 +18,7 @@ class _SettingProfileState extends State<SettingProfile> {
   String _valueChanged = '';
   String _valueToValidate = '';
   String _valueSaved = '';
-
+  bool hidepassword = true;
   final List<Map<String, dynamic>> _items = [
     {
       'value': 'male',
@@ -137,12 +136,35 @@ class _SettingProfileState extends State<SettingProfile> {
                     key: _formKey,
                     child: SizedBox(
                       height: 40,
-                      child: PasswordField(
-                        color: Colors.green,
-                        hintText: "Reset Password",
-                        backgroundColor: Colors.white,
-                        backgroundBorderRadius: BorderRadius.circular(10),
-                        hintStyle: TextStyle(color: iZblackL4),
+                      child: TextFormField(
+                        keyboardType: TextInputType.text,
+                        textInputAction: TextInputAction.go,
+                        onFieldSubmitted: (v) {
+                          print(v);
+                        },
+
+                        style: setingBoxTextStyle(),
+
+                        decoration: InputDecoration(
+                            hintStyle: TextStyle(color: iZblackL4),
+                            border: InputBorder.none,
+                            hintText: 'Reset Password',
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  hidepassword = !hidepassword;
+                                });
+                              },
+                              color: iZgreenL1.withOpacity(0.4),
+                              icon: Icon(hidepassword
+                                  ? Icons.visibility_off
+                                  : Icons.visibility),
+                            )),
+                        // The validator receives the text that the user has entered.
+                        validator: (input) => input.length < 3
+                            ? "Password should be minimum 3 charector"
+                            : null,
+                        obscureText: hidepassword,
                       ),
                     ),
                   ),
@@ -240,10 +262,17 @@ class _SettingProfileState extends State<SettingProfile> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Expanded(child: Text('Max Distance')),
+                        Expanded(
+                            child: Text(
+                          'Max Distance',
+                          style: setingBoxTextStyle(),
+                        )),
                         Container(
                             alignment: Alignment.centerRight,
-                            child: Text('$maxdistance kms'))
+                            child: Text(
+                              '$maxdistance kms',
+                              style: setingBoxTextStyle(),
+                            ))
                       ],
                     ),
                     Slider(
@@ -266,10 +295,17 @@ class _SettingProfileState extends State<SettingProfile> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Expanded(child: Text('Age Range')),
+                        Expanded(
+                            child: Text(
+                          'Age Range',
+                          style: setingBoxTextStyle(),
+                        )),
                         Container(
                             alignment: Alignment.centerRight,
-                            child: Text('$minage - $maxage'))
+                            child: Text(
+                              '$minage - $maxage',
+                              style: setingBoxTextStyle(),
+                            ))
                       ],
                     ),
                     RangeSlider(
@@ -290,16 +326,20 @@ class _SettingProfileState extends State<SettingProfile> {
                   ],
                 )),
                 Container(
-                    width: 300,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12.0),
-                      color: iZwhite,
-                    ),
+                    width: double.infinity,
+                    margin: EdgeInsets.symmetric(
+                        horizontal: izDefultSpace, vertical: 6),
                     child: RaisedButton(
+                      color: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
                       onPressed: () {},
-                      child: const Text('Enabled Button',
-                          style: TextStyle(fontSize: 20)),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(vertical: 15),
+                        child: Text('Pause Account',
+                            style: TextStyle(fontSize: 20, color: iZblackL4)),
+                      ),
                     )),
                 Padding(
                   padding: const EdgeInsets.only(top: 10, bottom: 10),
