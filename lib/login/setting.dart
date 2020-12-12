@@ -4,6 +4,9 @@ import '../constantColor.dart';
 import '../defalte-Button.dart';
 import '../top-back-appbar.dart';
 import 'package:select_form_field/select_form_field.dart';
+import 'package:form_field_validator/form_field_validator.dart';
+import 'package:http/http.dart' as http;
+import 'dart:io';
 
 class SettingProfile extends StatefulWidget {
   @override
@@ -11,13 +14,31 @@ class SettingProfile extends StatefulWidget {
 }
 
 class _SettingProfileState extends State<SettingProfile> {
+  //Update Password
+  String newpassword;
+  Future<void> savepassword() async {
+    String url = 'http://across.life2grow.com/api/update-password';
+    var response = await http.post(url,
+        headers: {HttpHeaders.authorizationHeader: "Basic your_api_token_here"},
+        body: {'newpassword': newpassword});
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
+    Navigator.pop(context);
+  }
+
+//Update Location
+  String currentLocation;
+
+  Future<void> updateLocation() async {
+    print(currentLocation);
+    Navigator.pop(context);
+  }
+
   final _formKey = GlobalKey<FormState>();
-  final _formKeydiscovery = GlobalKey<FormState>();
+  final _locationformkey = GlobalKey<FormState>();
+  final _interestformkey = GlobalKey<FormState>();
   TextEditingController _controller;
   //String _initialValue;
-  String _valueChanged = '';
-  String _valueToValidate = '';
-  String _valueSaved = '';
   bool hidepassword = true;
   final List<Map<String, dynamic>> _items = [
     {
@@ -41,9 +62,7 @@ class _SettingProfileState extends State<SettingProfile> {
   RangeValues values = RangeValues(22, 35);
   int minage = 22;
   int maxage = 35;
-
   int maxdistance = 40;
-
   @override
   void initState() {
     super.initState();
@@ -139,9 +158,7 @@ class _SettingProfileState extends State<SettingProfile> {
                       child: TextFormField(
                         keyboardType: TextInputType.text,
                         textInputAction: TextInputAction.go,
-
                         style: setingBoxTextStyle(),
-
                         decoration: InputDecoration(
                             hintStyle: TextStyle(color: iZblackL4),
                             border: InputBorder.none,
@@ -158,11 +175,27 @@ class _SettingProfileState extends State<SettingProfile> {
                                   : Icons.visibility),
                             )),
                         // The validator receives the text that the user has entered.
-                        validator: (input) => input.length > 3
-                            ? "Password should be minimum 3 charector"
-                            : null,
-                        onFieldSubmitted: (v) {
-                          print(v);
+                        validator: MultiValidator([
+                          MinLengthValidator(8,
+                              errorText: "Password should be atleast 8 digit"),
+                          PatternValidator(r'(?=.*?[#?!@$%^&*-])',
+                              errorText:
+                                  'Passwords must have at least one special character')
+                        ]),
+                        onFieldSubmitted: (value) {
+                          if (_formKey.currentState.validate()) {
+                            setState(() {
+                              newpassword = value;
+                            });
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                });
+                            return savepassword();
+                          }
                         },
 
                         obscureText: hidepassword,
@@ -183,7 +216,7 @@ class _SettingProfileState extends State<SettingProfile> {
                   ),
                 ),
                 Form(
-                    key: _formKeydiscovery,
+                    key: _locationformkey,
                     child: Column(children: <Widget>[
                       SettingBoxes(
                         child: Row(
@@ -200,63 +233,69 @@ class _SettingProfileState extends State<SettingProfile> {
                               child: TextFormField(
                                 textAlign: TextAlign.right,
                                 style: setingBoxTextStyle(),
-
                                 decoration: InputDecoration(
                                     hintStyle: TextStyle(color: iZgreen),
                                     border: InputBorder.none,
                                     hintText: 'My Current Location'),
-                                // The validator receives the text that the user has entered.
-                                validator: (value) {
-                                  if (value.isEmpty) {
-                                    return 'Please enter some text';
+                                validator: MultiValidator([
+                                  RequiredValidator(errorText: "Required"),
+                                ]),
+                                onFieldSubmitted: (value) {
+                                  if (_locationformkey.currentState
+                                      .validate()) {
+                                    setState(() {
+                                      currentLocation = value;
+                                    });
+                                    showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return Center(
+                                            child: CircularProgressIndicator(),
+                                          );
+                                        });
+                                    return updateLocation();
                                   }
-                                  return null;
                                 },
                               ),
                             )
                           ],
                         ),
                       ),
-                      SettingBoxes(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Interested',
-                              style: setingBoxTextStyle(),
-                            ),
-                            SizedBox(
-                              width: 20.0,
-                            ),
-                            Expanded(
-                              child: SelectFormField(
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  color: iZblue,
-                                  letterSpacing: 1.04,
-                                ),
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                ),
-                                textAlign: TextAlign.right,
-                                type: SelectFormFieldType.dropdown,
-                                controller: _controller,
-                                //initialValue: _initialValue,
-                                items: _items,
-                                onChanged: (val) =>
-                                    setState(() => _valueChanged = val),
-                                validator: (val) {
-                                  setState(() => _valueToValidate = val);
-                                  return null;
-                                },
-                                onSaved: (val) =>
-                                    setState(() => _valueSaved = val),
-                              ),
-                            )
-                          ],
-                        ),
-                      )
                     ])),
+                SettingBoxes(
+                  child: Form(
+                    key: _interestformkey,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Interested',
+                          style: setingBoxTextStyle(),
+                        ),
+                        SizedBox(
+                          width: 20.0,
+                        ),
+                        Expanded(
+                          child: SelectFormField(
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: iZblue,
+                              letterSpacing: 1.04,
+                            ),
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                            ),
+                            textAlign: TextAlign.right,
+                            type: SelectFormFieldType.dropdown,
+                            controller: _controller,
+                            //initialValue: _initialValue,
+                            items: _items,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
                 SettingBoxes(
                     child: Column(
                   children: [

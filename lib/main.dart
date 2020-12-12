@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 //import 'profile-Discover-maches/profile-Info.dart';
 
-//import 'login/setting.dart';
+import 'login/setting.dart';
 
 //import 'login/profile-media.dart';
 
@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 
 import 'login/verify-number.dart';
 
-import 'login/start-login.dart';
+//import 'login/start-login.dart';
 
 //import 'login/profile-bio.dart';
 //import 'login/who-are-you.dart';
@@ -32,7 +32,7 @@ class _MyAppState extends State<MyApp> {
       initialRoute: '/',
       routes: {
         // When navigating to the "/" route, build the FirstScreen widget.
-        '/': (context) => StartLogin(),
+        '/': (context) => SettingProfile(),
         // When navigating to the "/second" route, build the SecondScreen widget.
         '/veryfy-number': (context) => VeryfyNumber(),
       },
