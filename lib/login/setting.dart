@@ -139,9 +139,6 @@ class _SettingProfileState extends State<SettingProfile> {
                       child: TextFormField(
                         keyboardType: TextInputType.text,
                         textInputAction: TextInputAction.go,
-                        onFieldSubmitted: (v) {
-                          print(v);
-                        },
 
                         style: setingBoxTextStyle(),
 
@@ -161,9 +158,13 @@ class _SettingProfileState extends State<SettingProfile> {
                                   : Icons.visibility),
                             )),
                         // The validator receives the text that the user has entered.
-                        validator: (input) => input.length < 3
+                        validator: (input) => input.length > 3
                             ? "Password should be minimum 3 charector"
                             : null,
+                        onFieldSubmitted: (v) {
+                          print(v);
+                        },
+
                         obscureText: hidepassword,
                       ),
                     ),

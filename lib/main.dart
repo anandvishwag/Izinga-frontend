@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 
 //import 'profile-Discover-maches/profile-Info.dart';
 
-import 'login/setting.dart';
+//import 'login/setting.dart';
 
 //import 'login/profile-media.dart';
 
 //import 'login/welcomeScreen.dart';
 
-// import 'login/verify-number.dart';
+import 'login/verify-number.dart';
 
-//import 'login/start-login.dart';
+import 'login/start-login.dart';
 
 //import 'login/profile-bio.dart';
 //import 'login/who-are-you.dart';
@@ -29,6 +29,13 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      initialRoute: '/',
+      routes: {
+        // When navigating to the "/" route, build the FirstScreen widget.
+        '/': (context) => StartLogin(),
+        // When navigating to the "/second" route, build the SecondScreen widget.
+        '/veryfy-number': (context) => VeryfyNumber(),
+      },
       debugShowCheckedModeBanner: false,
       title: 'Izinga',
       theme: ThemeData(
@@ -36,14 +43,14 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: Colors.blue,
         backgroundColor: Colors.white,
       ),
-      home: SettingProfile(),
+      //home: StartLogin(),
       //ProfileInfo(),
       //ItsAMatch(),
       //SettingProfile(),
       //ProfileMedia(),
       //ProfileBio(),
       //WhoAreYou(),
-      //StartLogin(),
+      // StartLogin(),
       //  VeryfyNumber(),
 //welcomeScreen()
     );

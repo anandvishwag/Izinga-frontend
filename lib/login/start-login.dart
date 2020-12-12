@@ -42,12 +42,10 @@ class StartLogin extends StatelessWidget {
                           ),
                           children: [
                             TextSpan(
-                              text:
-                                  'By tapping Log In, you agree with our new text added',
+                              text: 'By tapping Log In, you agree with our',
                             ),
                             TextSpan(
-                              text:
-                                  'Terms of Service new pramod Kumar Yadav New Rahul pal',
+                              text: 'Terms of Service',
                               style: TextStyle(
                                 decoration: TextDecoration.underline,
                               ),
@@ -96,7 +94,9 @@ class StartLogin extends StatelessWidget {
                       height: 50,
                       width: 250,
                       child: RaisedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/veryfy-number');
+                        },
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(25.0),
                         ),
