@@ -6,6 +6,9 @@ import '../top-back-appbar.dart';
 import 'package:select_form_field/select_form_field.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:http/http.dart' as http;
+import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
+
 import 'dart:io';
 
 class SettingProfile extends StatefulWidget {
@@ -14,6 +17,32 @@ class SettingProfile extends StatefulWidget {
 }
 
 class _SettingProfileState extends State<SettingProfile> {
+  ///Get current location
+  String currentAddress = 'Location';
+  void _getCurrentLocation() async {
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    print(position.latitude);
+    print(position.longitude);
+
+    List<Placemark> newPlace =
+        await placemarkFromCoordinates(position.latitude, position.longitude);
+    Placemark placeMark = newPlace.first;
+    String name = placeMark.name;
+    //String subLocality = placeMark.subLocality;
+    String locality = placeMark.locality;
+    //String administrativeArea = placeMark.administrativeArea;
+    //String postalCode = placeMark.postalCode;
+    // String country = placeMark.country;
+    String address = "$name, $locality";
+
+    setState(() {
+      currentAddress = address; // update _address
+    });
+
+    Navigator.pop(context);
+  }
+
   //Update Password
   String newpassword;
   Future<void> savepassword() async {
@@ -28,15 +57,39 @@ class _SettingProfileState extends State<SettingProfile> {
 
 //Update Location
   String currentLocation;
-
   Future<void> updateLocation() async {
     print(currentLocation);
     Navigator.pop(context);
   }
 
+  //Update interest
+  String interest;
+  Future<void> updateInterest() async {
+    print(interest);
+    //Navigator.pop(context);
+  }
+
+  //update max distance
+  int maxDistance;
+  Future<void> updateDistance() async {
+    print(maxDistance);
+    //Navigator.pop(context);
+  }
+
+//update age range
+  int fminage;
+  int fmaxage;
+  Future<void> updateAgeRange() async {
+    print(fminage);
+    print(fmaxage);
+    //Navigator.pop(context);
+  }
+
   final _formKey = GlobalKey<FormState>();
   final _locationformkey = GlobalKey<FormState>();
   final _interestformkey = GlobalKey<FormState>();
+  final _distanceformkey = GlobalKey<FormState>();
+  final _agerangeformkey = GlobalKey<FormState>();
   TextEditingController _controller;
   //String _initialValue;
   bool hidepassword = true;
@@ -223,41 +276,28 @@ class _SettingProfileState extends State<SettingProfile> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'Location',
+                              currentAddress,
                               style: setingBoxTextStyle(),
                             ),
-                            SizedBox(
-                              width: 20.0,
-                            ),
-                            Expanded(
-                              child: TextFormField(
-                                textAlign: TextAlign.right,
-                                style: setingBoxTextStyle(),
-                                decoration: InputDecoration(
-                                    hintStyle: TextStyle(color: iZgreen),
-                                    border: InputBorder.none,
-                                    hintText: 'My Current Location'),
-                                validator: MultiValidator([
-                                  RequiredValidator(errorText: "Required"),
-                                ]),
-                                onFieldSubmitted: (value) {
-                                  if (_locationformkey.currentState
-                                      .validate()) {
-                                    setState(() {
-                                      currentLocation = value;
-                                    });
-                                    showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return Center(
-                                            child: CircularProgressIndicator(),
-                                          );
-                                        });
-                                    return updateLocation();
-                                  }
-                                },
+                            Container(
+                              child: SizedBox(
+                                width: 50.0,
+                                child: IconButton(
+                                    color: iZgreen,
+                                    icon: Icon(CupertinoIcons.scope),
+                                    onPressed: () {
+                                      showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return Center(
+                                              child:
+                                                  CircularProgressIndicator(),
+                                            );
+                                          });
+                                      _getCurrentLocation();
+                                    }),
                               ),
-                            )
+                            ),
                           ],
                         ),
                       ),
@@ -290,6 +330,12 @@ class _SettingProfileState extends State<SettingProfile> {
                             controller: _controller,
                             //initialValue: _initialValue,
                             items: _items,
+                            onChanged: (value) {
+                              setState(() {
+                                interest = value;
+                              });
+                              return updateInterest();
+                            },
                           ),
                         )
                       ],
@@ -297,73 +343,92 @@ class _SettingProfileState extends State<SettingProfile> {
                   ),
                 ),
                 SettingBoxes(
-                    child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                            child: Text(
-                          'Max Distance',
-                          style: setingBoxTextStyle(),
-                        )),
-                        Container(
-                            alignment: Alignment.centerRight,
-                            child: Text(
-                              '$maxdistance kms',
-                              style: setingBoxTextStyle(),
-                            ))
-                      ],
-                    ),
-                    Slider(
-                      activeColor: iZblueM,
-                      inactiveColor: iZwhiteGMD,
-                      min: 0,
-                      max: 100,
-                      value: maxdistance.toDouble(),
-                      onChanged: (double newValue) {
-                        setState(() {
-                          maxdistance = newValue.round();
-                        });
-                      },
-                    ),
-                  ],
+                    child: Form(
+                  key: _distanceformkey,
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                              child: Text(
+                            'Max Distance',
+                            style: setingBoxTextStyle(),
+                          )),
+                          Container(
+                              alignment: Alignment.centerRight,
+                              child: Text(
+                                '$maxdistance kms',
+                                style: setingBoxTextStyle(),
+                              ))
+                        ],
+                      ),
+                      Slider(
+                        activeColor: iZblueM,
+                        inactiveColor: iZwhiteGMD,
+                        min: 0,
+                        max: 100,
+                        value: maxdistance.toDouble(),
+                        onChanged: (double newValue) {
+                          setState(() {
+                            maxdistance = newValue.round();
+                          });
+                        },
+                        onChangeEnd: (val) {
+                          setState(() {
+                            maxDistance = val.round();
+                          });
+                          return updateDistance();
+                        },
+                      ),
+                    ],
+                  ),
                 )),
                 SettingBoxes(
-                    child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                            child: Text(
-                          'Age Range',
-                          style: setingBoxTextStyle(),
-                        )),
-                        Container(
-                            alignment: Alignment.centerRight,
-                            child: Text(
-                              '$minage - $maxage',
-                              style: setingBoxTextStyle(),
-                            ))
-                      ],
-                    ),
-                    RangeSlider(
-                      activeColor: iZblueM,
-                      inactiveColor: iZwhiteGMD,
-                      min: 1,
-                      max: 100,
-                      values: values,
-                      divisions: 100,
-                      onChanged: (value) {
-                        setState(() {
-                          values = value;
-                          minage = value.start.toInt();
-                          maxage = value.end.toInt();
-                        });
-                      },
-                    )
-                  ],
+                    child: Form(
+                  key: _agerangeformkey,
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                              child: Text(
+                            'Age Range',
+                            style: setingBoxTextStyle(),
+                          )),
+                          Container(
+                              alignment: Alignment.centerRight,
+                              child: Text(
+                                '$minage - $maxage',
+                                style: setingBoxTextStyle(),
+                              ))
+                        ],
+                      ),
+                      RangeSlider(
+                        activeColor: iZblueM,
+                        inactiveColor: iZwhiteGMD,
+                        min: 1,
+                        max: 100,
+                        values: values,
+                        divisions: 100,
+                        onChanged: (value) {
+                          setState(() {
+                            values = value;
+                            minage = value.start.round();
+                            maxage = value.end.round();
+                          });
+                        },
+                        onChangeEnd: (val) {
+                          setState(() {
+                            fminage = val.start.round();
+                            fmaxage = val.end.round();
+                          });
+                          return updateAgeRange();
+                        },
+                      )
+                    ],
+                  ),
                 )),
                 Container(
                     width: double.infinity,
