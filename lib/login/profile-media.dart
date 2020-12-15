@@ -1,10 +1,15 @@
+import 'dart:io';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_cropper/image_cropper.dart';
 import '../constantColor.dart';
 import '../custom-icon-button.dart';
 import '../defalte-Button.dart';
 import '../top-back-appbar.dart';
 import 'loginConstructor/form-Heading-And-SubHeading.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ProfileMedia extends StatefulWidget {
   @override
@@ -12,6 +17,39 @@ class ProfileMedia extends StatefulWidget {
 }
 
 class _ProfileMediaState extends State<ProfileMedia> {
+  File _image;
+  final picker = ImagePicker();
+  _getImage(ImageSource source) async {
+    final pickedFile = await picker.getImage(source: source);
+
+    setState(() {
+      if (pickedFile != null) {
+        // _image = File(pickedFile.path);
+        _cropImage(pickedFile.path);
+      } else {
+        print('No image selected.');
+      }
+    });
+    Navigator.pop(context);
+  }
+
+  _cropImage(pickedFile) async {
+    File cropped = await ImageCropper.cropImage(
+      sourcePath: pickedFile,
+      androidUiSettings: AndroidUiSettings(
+          statusBarColor: iZgreenL1,
+          toolbarColor: iZgreenL1,
+          toolbarTitle: "Crop Image",
+          toolbarWidgetColor: Colors.white),
+      aspectRatio: CropAspectRatio(ratioX: 1.0, ratioY: 1.0),
+    );
+    if (cropped != null) {
+      setState(() {
+        _image = cropped;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,7 +85,9 @@ class _ProfileMediaState extends State<ProfileMedia> {
                   height: 225,
                   width: 225,
                   child: CircleAvatar(
-                    backgroundImage: AssetImage('assets/img/profilePhoto.jpg'),
+                    backgroundImage: _image == null
+                        ? AssetImage('assets/img/profilePhoto.jpg')
+                        : FileImage(_image),
                   ),
                 ),
               ),
@@ -68,7 +108,7 @@ class _ProfileMediaState extends State<ProfileMedia> {
                       margin: EdgeInsets.only(top: 30),
                       child: CustomIconButton(
                         iconPress: () {
-                          print('buttonPess');
+                          _onCameraButtonPress();
                         },
                         cBtHeight: 80,
                         cBtWidht: 80,
@@ -100,5 +140,35 @@ class _ProfileMediaState extends State<ProfileMedia> {
         ),
       ),
     );
+  }
+
+  void _onCameraButtonPress() {
+    showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        builder: (context) {
+          return Container(
+            height: MediaQuery.of(context).size.height * 0.2,
+            child: Column(
+              children: [
+                ListTile(
+                  leading: Icon(CupertinoIcons.camera),
+                  title: Text('Camera'),
+                  onTap: () {
+                    _getImage(ImageSource.camera);
+                  },
+                ),
+                ListTile(
+                  leading: Icon(CupertinoIcons.folder),
+                  title: Text('Gallery'),
+                  onTap: () {
+                    _getImage(ImageSource.gallery);
+                  },
+                )
+              ],
+            ),
+          );
+        });
   }
 }
