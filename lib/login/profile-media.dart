@@ -1,6 +1,5 @@
-import 'dart:io';
 import 'dart:convert';
-import 'package:http/http.dart' as http;
+import 'dart:io';
 import 'package:IzingaDating/datamodel/userlogin_completedata.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,16 +10,24 @@ import '../defalte-Button.dart';
 import '../top-back-appbar.dart';
 import 'loginConstructor/form-Heading-And-SubHeading.dart';
 import 'package:image_picker/image_picker.dart';
+import '../api/api.dart';
 
 class ProfileMedia extends StatefulWidget {
   final UserRegisterCompletedata userRegisterCompletedata;
   ProfileMedia({this.userRegisterCompletedata});
   @override
-  _ProfileMediaState createState() => _ProfileMediaState();
+  _ProfileMediaState createState() =>
+      _ProfileMediaState(userRegisterCompletedata);
 }
 
 class _ProfileMediaState extends State<ProfileMedia> {
+  final UserRegisterCompletedata userRegisterCompletedata;
+  _ProfileMediaState(this.userRegisterCompletedata);
   File _image;
+  File tempFile;
+  String base64Image;
+  bool _isDesabled = true;
+
   final picker = ImagePicker();
   _getImage(ImageSource source) async {
     final pickedFile = await picker.getImage(source: source);
@@ -49,9 +56,23 @@ class _ProfileMediaState extends State<ProfileMedia> {
     if (cropped != null) {
       setState(() {
         _image = cropped;
+        _isDesabled = false;
       });
-      print(_image);
     }
+  }
+
+  _formSubmit() async {
+    var data = jsonEncode({
+      'firstname': userRegisterCompletedata.userLoginData.firstname,
+      'lastname': userRegisterCompletedata.userLoginData.lastname,
+      'dateobirth': userRegisterCompletedata.userLoginData.dateobirth,
+      'city': userRegisterCompletedata.userLoginData.city,
+      'gender': userRegisterCompletedata.userLoginData.gender,
+      'intrested': userRegisterCompletedata.userLoginData.intrested,
+    });
+    var res = await CallApi().postData(data, '/test-post');
+    var body = jsonDecode(res.body);
+    print(body);
   }
 
   @override
@@ -82,6 +103,9 @@ class _ProfileMediaState extends State<ProfileMedia> {
                   subHeding: "Add some media to your profile",
                   headingColor: iZwhite,
                 ),
+              ),
+              Container(
+                child: Text(userRegisterCompletedata.userLoginData.firstname),
               ),
               Container(
                 margin: EdgeInsets.only(top: 15),
@@ -135,7 +159,7 @@ class _ProfileMediaState extends State<ProfileMedia> {
                 margin: EdgeInsets.only(bottom: izDefultSpace),
                 child: DefalteButton(
                   'Finish',
-                  onePress: () {},
+                  onePress: _isDesabled ? null : _formSubmit,
                   btTextColor: iZblue,
                 ),
               ),

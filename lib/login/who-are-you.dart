@@ -76,7 +76,12 @@ class _WhoAreYouState extends State<WhoAreYou> {
     return true;
   }
 
-  String firstname, lastname, dateobirth, city, gender, intrested;
+  String firstname,
+      lastname,
+      dateobirth,
+      city,
+      gender = 'male',
+      intrested = 'Women';
   List<String> lst = ['Male', 'Female', 'Other'];
   int selectedIndex = 0;
   List<String> list = ['Women', 'Men', 'Both'];

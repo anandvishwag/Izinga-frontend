@@ -28,7 +28,7 @@ class _ProfileBioState extends State<ProfileBio> {
         profileBioError = "Profile bio is required.";
       });
       return false;
-    } else if (userInput.length < 300) {
+    } else if (userInput.length > 300) {
       setState(() {
         isProfileBioValidate = true;
         profileBioError = "Profile bio should be atleast 300 charector.";
@@ -62,7 +62,10 @@ class _ProfileBioState extends State<ProfileBio> {
                   headingColor: iZblue,
                 ),
               ),
-             
+              Container(
+                alignment: Alignment.center,
+                child: Text(userlogindata.firstname),
+              ),
               Container(
                 padding:
                     EdgeInsets.only(left: izDefultSpace, right: izDefultSpace),
