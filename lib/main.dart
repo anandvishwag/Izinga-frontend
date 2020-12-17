@@ -7,11 +7,11 @@ import 'package:flutter/material.dart';
 
 //import 'login/profile-media.dart';
 
-import 'login/welcomeScreen.dart';
+//import 'login/welcomeScreen.dart';
 
 import 'login/verify-number.dart';
 
-//import 'login/start-login.dart';
+import 'login/start-login.dart';
 
 //import 'login/profile-bio.dart';
 import 'login/who-are-you.dart';
@@ -32,7 +32,7 @@ class _MyAppState extends State<MyApp> {
       initialRoute: '/',
       routes: {
         // When navigating to the "/" route, build the FirstScreen widget.
-        '/': (context) => WelcomeScreen(),
+        '/': (context) => StartLogin(),
         // When navigating to the "/second" route, build the SecondScreen widget.
         '/veryfy-number': (context) => VeryfyNumber(),
         '/who-are-you': (context) => WhoAreYou(),

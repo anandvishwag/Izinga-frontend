@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:IzingaDating/datamodel/userlogin_completedata.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -12,6 +13,8 @@ import 'loginConstructor/form-Heading-And-SubHeading.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ProfileMedia extends StatefulWidget {
+  final UserRegisterCompletedata userRegisterCompletedata;
+  ProfileMedia({this.userRegisterCompletedata});
   @override
   _ProfileMediaState createState() => _ProfileMediaState();
 }
@@ -47,6 +50,7 @@ class _ProfileMediaState extends State<ProfileMedia> {
       setState(() {
         _image = cropped;
       });
+      print(_image);
     }
   }
 

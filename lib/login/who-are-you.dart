@@ -1,7 +1,10 @@
 import 'package:IzingaDating/constantColor.dart';
+import 'package:IzingaDating/datamodel/user_logindata.dart';
+import 'package:IzingaDating/login/profile-bio.dart';
+// import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../defalte-Button.dart';
+// import '../defalte-Button.dart';
 import '../top-back-appbar.dart';
 import 'loginConstructor/form-Heading-And-SubHeading.dart';
 import 'loginConstructor/whoWeAreWidgets.dart';
@@ -12,6 +15,68 @@ class WhoAreYou extends StatefulWidget {
 }
 
 class _WhoAreYouState extends State<WhoAreYou> {
+  TextEditingController nameController = TextEditingController();
+  TextEditingController lastNameController = TextEditingController();
+  TextEditingController dobController = TextEditingController();
+  TextEditingController cityController = TextEditingController();
+  bool isNameValidate = false;
+  bool isLastNameValidate = false;
+  bool isDobValidate = false;
+  bool isCityValidate = false;
+
+  bool validateNameField(String userInput) {
+    if (userInput.isEmpty) {
+      setState(() {
+        isNameValidate = true;
+      });
+      return false;
+    }
+    setState(() {
+      isNameValidate = false;
+    });
+    return true;
+  }
+
+  bool validateLastNameField(String userInput) {
+    if (userInput.isEmpty) {
+      setState(() {
+        isLastNameValidate = true;
+      });
+      return false;
+    }
+    setState(() {
+      isLastNameValidate = false;
+    });
+    return true;
+  }
+
+  bool validateDobField(String userInput) {
+    if (userInput.isEmpty) {
+      setState(() {
+        isDobValidate = true;
+      });
+      return false;
+    }
+    setState(() {
+      isDobValidate = false;
+    });
+    return true;
+  }
+
+  bool validateCityField(String userInput) {
+    if (userInput.isEmpty) {
+      setState(() {
+        isCityValidate = true;
+      });
+      return false;
+    }
+    setState(() {
+      isCityValidate = false;
+    });
+    return true;
+  }
+
+  String firstname, lastname, dateobirth, city, gender, intrested;
   List<String> lst = ['Male', 'Female', 'Other'];
   int selectedIndex = 0;
   List<String> list = ['Women', 'Men', 'Both'];
@@ -20,16 +85,7 @@ class _WhoAreYouState extends State<WhoAreYou> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: iZwhiteG,
-      appBar: TopBackAppBar(
-        appbarColor: Colors.transparent,
-        iconColor: iZblue,
-        onePressBack: () {
-          Navigator.pop(context);
-        },
-        onePressClose: () {
-          Navigator.pop(context);
-        },
-      ),
+      appBar: topBackAppbarBlIcon(),
       body: Center(
         child: SingleChildScrollView(
           child: Column(
@@ -40,7 +96,7 @@ class _WhoAreYouState extends State<WhoAreYou> {
                 padding: EdgeInsets.only(top: 0, bottom: 50),
                 alignment: Alignment.center,
                 child: FormHeadingAndSubHeading(
-                  'Who Are You ?',
+                  'Who Are You?',
                   subHeding: "Let’s get the basic",
                   headingColor: iZblue,
                 ),
@@ -53,11 +109,91 @@ class _WhoAreYouState extends State<WhoAreYou> {
                   children: [
                     Row(
                       children: [
-                        TextFieldprofileDetails('e.g Corrine', 'Name '),
+                        // TextFieldprofileDetails(
+                        //   'e.g Corrine',
+                        //   'Name ',
+                        // ),
+                        Expanded(
+                          child: TextField(
+                            controller: nameController,
+                            textInputAction: TextInputAction.next,
+                            style: TextStyle(
+                              color: iZgreen,
+                              fontSize: 16,
+                            ),
+                            decoration: InputDecoration(
+                              icon: Icon(
+                                CupertinoIcons.staroflife_fill,
+                                color: iZblueL,
+                                size: 10,
+                              ),
+                              errorText:
+                                  isNameValidate ? '*Name is required.' : null,
+                              hintText: 'e.g Corrine',
+                              hintStyle: TextStyle(
+                                color: iZblueL,
+                              ),
+                              labelText: 'Name ',
+                              labelStyle:
+                                  TextStyle(fontSize: 16, color: iZblueL),
+                              border: UnderlineInputBorder(
+                                  borderSide:
+                                      BorderSide(width: 2, color: iZblueM)),
+                              focusedBorder: UnderlineInputBorder(
+                                  borderSide:
+                                      BorderSide(width: 2, color: iZgreen)),
+                            ),
+                            onChanged: (value) {
+                              setState(() {
+                                isNameValidate = false;
+                              });
+                              firstname = value;
+                            },
+                          ),
+                        ),
                         SizedBox(
                           width: izDefultSpace,
                         ),
-                        TextFieldprofileDetails('e.g M. Burns', 'Last Name'),
+                        // TextFieldprofileDetails('e.g M. Burns', 'Last Name'),
+                        Expanded(
+                          child: TextField(
+                            controller: lastNameController,
+                            textInputAction: TextInputAction.next,
+                            style: TextStyle(
+                              color: iZgreen,
+                              fontSize: 16,
+                            ),
+                            decoration: InputDecoration(
+                              icon: Icon(
+                                CupertinoIcons.staroflife_fill,
+                                color: iZblueL,
+                                size: 10,
+                              ),
+                              hintText: 'e.g M. Burns',
+                              hintStyle: TextStyle(
+                                color: iZblueL,
+                              ),
+                              labelText: 'Last Name',
+                              labelStyle:
+                                  TextStyle(fontSize: 16, color: iZblueL),
+                              border: UnderlineInputBorder(
+                                  borderSide:
+                                      BorderSide(width: 2, color: iZblueM)),
+                              focusedBorder: UnderlineInputBorder(
+                                  borderSide:
+                                      BorderSide(width: 2, color: iZgreen)),
+                              errorText: isLastNameValidate
+                                  ? '*Lname is required.'
+                                  : null,
+                            ),
+                            onChanged: (value) {
+                              setState(() {
+                                isLastNameValidate = false;
+                              });
+                              lastname = value;
+                            },
+                          ),
+                        ),
                       ],
                     ),
                     SizedBox(
@@ -65,12 +201,87 @@ class _WhoAreYouState extends State<WhoAreYou> {
                     ),
                     Row(
                       children: [
-                        TextFieldprofileDetails(
-                            'e.g 16/11/2020', 'Date Of Birth'),
+                        // TextFieldprofileDetails('e.g 16/11/2020', 'Date Of Birth'),
+                        Expanded(
+                          child: TextField(
+                            controller: dobController,
+                            textInputAction: TextInputAction.next,
+                            style: TextStyle(
+                              color: iZgreen,
+                              fontSize: 16,
+                            ),
+                            decoration: InputDecoration(
+                              icon: Icon(
+                                CupertinoIcons.staroflife_fill,
+                                color: iZblueL,
+                                size: 10,
+                              ),
+                              hintText: 'e.g 16/11/2020',
+                              hintStyle: TextStyle(
+                                color: iZblueL,
+                              ),
+                              labelText: 'Date Of Birth',
+                              labelStyle:
+                                  TextStyle(fontSize: 16, color: iZblueL),
+                              border: UnderlineInputBorder(
+                                  borderSide:
+                                      BorderSide(width: 2, color: iZblueM)),
+                              focusedBorder: UnderlineInputBorder(
+                                  borderSide:
+                                      BorderSide(width: 2, color: iZgreen)),
+                              errorText:
+                                  isDobValidate ? '*DOB is Required.' : null,
+                            ),
+                            onChanged: (value) {
+                              setState(() {
+                                isDobValidate = false;
+                              });
+                              dateobirth = value;
+                            },
+                          ),
+                        ),
                         SizedBox(
                           width: izDefultSpace,
                         ),
-                        TextFieldprofileDetails('e.g M. New Yark', 'City'),
+                        Expanded(
+                          child: TextField(
+                            controller: cityController,
+                            textInputAction: TextInputAction.next,
+                            style: TextStyle(
+                              color: iZgreen,
+                              fontSize: 16,
+                            ),
+                            decoration: InputDecoration(
+                              icon: Icon(
+                                CupertinoIcons.staroflife_fill,
+                                color: iZblueL,
+                                size: 10,
+                              ),
+                              hintText: 'e.g M. New Yark',
+                              hintStyle: TextStyle(
+                                color: iZblueL,
+                              ),
+                              labelText: 'City',
+                              labelStyle:
+                                  TextStyle(fontSize: 16, color: iZblueL),
+                              border: UnderlineInputBorder(
+                                  borderSide:
+                                      BorderSide(width: 2, color: iZblueM)),
+                              focusedBorder: UnderlineInputBorder(
+                                  borderSide:
+                                      BorderSide(width: 2, color: iZgreen)),
+                              errorText:
+                                  isCityValidate ? '*City is required.' : null,
+                            ),
+                            onChanged: (value) {
+                              setState(() {
+                                isCityValidate = false;
+                              });
+                              city = value;
+                            },
+                          ),
+                        ),
+                        // TextFieldprofileDetails('e.g M. New Yark', 'City'),
                       ],
                     ),
                     FormHeading('Gender'),
@@ -106,16 +317,56 @@ class _WhoAreYouState extends State<WhoAreYou> {
                   ],
                 ),
               ),
+              // Container(
+              //   alignment: Alignment.bottomCenter,
+              //   padding: EdgeInsets.only(top: 50, bottom: 50),
+              //   child: RaisedButton('Next', onePress:() {
+
+              //   }, btColor: iZwhite, btTextColor: iZblue,),
+
+              // ),
               Container(
                 alignment: Alignment.bottomCenter,
                 padding: EdgeInsets.only(top: 50, bottom: 50),
-                child: DefalteButton(
-                  'Next',
-                  onePress: null,
-                  btColor: iZwhite,
-                  btTextColor: iZblue,
+                child: SizedBox(
+                  height: 50,
+                  width: 250,
+                  child: RaisedButton(
+                    onPressed: () {
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(builder: (context) => ProfileBio()),
+                      // );
+
+                      if (validateNameField(nameController.text) == true &&
+                          validateLastNameField(lastNameController.text) ==
+                              true &&
+                          validateDobField(dobController.text) &&
+                          validateCityField(cityController.text) == true) {
+                        showAllText(context, firstname, lastname, dateobirth,
+                            city, gender, intrested);
+                      }
+
+                      /* if (isNameValidate == true) {
+                        showAllText(context, firstname, lastname, dateobirth,
+                            city, gender, intrested);
+                      }*/
+                    },
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25.0),
+                    ),
+                    color: iZwhite,
+                    child: Text(
+                      'Next',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: iZblue,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
                 ),
-              ),
+              )
             ],
           ),
         ),
@@ -123,9 +374,10 @@ class _WhoAreYouState extends State<WhoAreYou> {
     );
   }
 
-  void changeIndex(int index) {
+  void changeIndex(int index, String txt) {
     setState(() {
       selectedIndex = index;
+      gender = txt;
     });
   }
 
@@ -133,7 +385,7 @@ class _WhoAreYouState extends State<WhoAreYou> {
     return Expanded(
       child: SizedBox(
         child: RaisedButton(
-          onPressed: () => changeIndex(index),
+          onPressed: () => changeIndex(index, txt),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)),
           child: Text(
@@ -148,9 +400,10 @@ class _WhoAreYouState extends State<WhoAreYou> {
     );
   }
 
-  void changeSecondaryIndex(int index) {
+  void changeSecondaryIndex(int index, String txt) {
     setState(() {
       secondIndex = index;
+      intrested = txt;
     });
   }
 
@@ -158,7 +411,7 @@ class _WhoAreYouState extends State<WhoAreYou> {
     return Expanded(
       child: SizedBox(
         child: RaisedButton(
-          onPressed: () => changeSecondaryIndex(index),
+          onPressed: () => changeSecondaryIndex(index, txt),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)),
           child: Text(
@@ -172,4 +425,20 @@ class _WhoAreYouState extends State<WhoAreYou> {
       ),
     );
   }
+}
+
+void showAllText(BuildContext context, String firstname, String lastname,
+    String dob, String city, String gender, String intrested) {
+  final userlogindata = UserLoginData(
+      firstname: firstname,
+      lastname: lastname,
+      dateobirth: dob,
+      city: city,
+      gender: gender,
+      intrested: intrested);
+  Navigator.pushReplacement(
+    context,
+    MaterialPageRoute(
+        builder: (context) => ProfileBio(userlogin: userlogindata)),
+  );
 }

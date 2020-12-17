@@ -4,14 +4,13 @@ import 'package:flutter/material.dart';
 import '../../constantColor.dart';
 
 class FormHeading extends StatelessWidget {
- final String headingText;
- FormHeading( this.headingText);
+  final String headingText;
+  FormHeading(this.headingText);
   @override
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.centerLeft,
-      padding: EdgeInsets.only(
-          bottom: 15, top: izDefultSpace),
+      padding: EdgeInsets.only(bottom: 15, top: izDefultSpace),
       child: Text(
         headingText,
         style: TextStyle(
@@ -24,11 +23,13 @@ class FormHeading extends StatelessWidget {
     );
   }
 }
+
 class TextFieldprofileDetails extends StatelessWidget {
   final String hintTextin;
   final String lableTextin;
+  final Function onChange;
 
-  TextFieldprofileDetails(this.hintTextin, this.lableTextin);
+  TextFieldprofileDetails(this.hintTextin, this.lableTextin, this.onChange);
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -55,9 +56,8 @@ class TextFieldprofileDetails extends StatelessWidget {
           focusedBorder: UnderlineInputBorder(
               borderSide: BorderSide(width: 2, color: iZgreen)),
         ),
+        onChanged: onChange,
       ),
     );
   }
 }
-
-
