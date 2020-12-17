@@ -24,22 +24,22 @@ class _ProfileMediaState extends State<ProfileMedia> {
   final UserRegisterCompletedata userRegisterCompletedata;
   _ProfileMediaState(this.userRegisterCompletedata);
   File _image;
-  File tempFile;
-  String base64Image;
   bool _isDesabled = true;
-
-  final picker = ImagePicker();
+  String base64Image = '';
+  String fileName = '';
+  //final picker = ImagePicker();
   _getImage(ImageSource source) async {
-    final pickedFile = await picker.getImage(source: source);
+    _image = await ImagePicker.pickImage(source: source);
 
     setState(() {
-      if (pickedFile != null) {
+      if (_image != null) {
         // _image = File(pickedFile.path);
-        _cropImage(pickedFile.path);
+        _cropImage(_image.path);
       } else {
         print('No image selected.');
       }
     });
+
     Navigator.pop(context);
   }
 
@@ -54,8 +54,14 @@ class _ProfileMediaState extends State<ProfileMedia> {
       aspectRatio: CropAspectRatio(ratioX: 1.0, ratioY: 1.0),
     );
     if (cropped != null) {
+      base64Image = base64Encode(cropped.readAsBytesSync());
+      fileName = cropped.path.split("/").last;
+      //print(base64Image);
+      //print(fileName);
+
       setState(() {
-        _image = cropped;
+        base64Image = base64Image;
+        fileName = fileName;
         _isDesabled = false;
       });
     }
@@ -69,8 +75,11 @@ class _ProfileMediaState extends State<ProfileMedia> {
       'city': userRegisterCompletedata.userLoginData.city,
       'gender': userRegisterCompletedata.userLoginData.gender,
       'intrested': userRegisterCompletedata.userLoginData.intrested,
+      'bio': userRegisterCompletedata.tellypurself,
+      'image': base64Image,
+      'image_name': fileName
     });
-    var res = await CallApi().postData(data, '/test-post');
+    var res = await CallApi().postData(data, '/resister');
     var body = jsonDecode(res.body);
     print(body);
   }
