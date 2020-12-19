@@ -1,4 +1,5 @@
 import 'package:IzingaDating/login/post_services.dart';
+import 'package:IzingaDating/login/setting.dart';
 import 'package:IzingaDating/login/welcomeScreen.dart';
 import '../top-back-appbar.dart';
 import 'package:IzingaDating/model/post_model.dart';
@@ -131,22 +132,35 @@ void postOtp(BuildContext context, String phn, String otpnumber) {
     if (response.statusCode == 200) {
       //postFromJson(response.body);
       var userResponce = jsonDecode(response.body);
-      //  print(userResponce);
+
       VarifyOtpResponse varifyOtpResponse = getvarifyOtpFromJson(response.body);
       // String status =varifyOtpResponse.status;
       if (varifyOtpResponse.status) {
-        // print();
-        String mobileNumber = userResponce['mobile_number'];
-        //  SharedPreferences.setMockInitialValues({});
-        SharedPreferences localStorage = await SharedPreferences.getInstance();
-        localStorage.setString('mobile', mobileNumber);
-        String mobile = localStorage.getString('mobile');
-        print("mobile number is $mobile");
-        showToast(varifyOtpResponse.message);
-        /*    Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => WelcomeScreen()),
-        );*/
+        if (userResponce['logedin']) {
+          SharedPreferences localStorage =
+              await SharedPreferences.getInstance();
+          localStorage.setString('token', userResponce['token']);
+          localStorage.setString(
+              'user', json.encode(userResponce['user_data']));
+          var userJson = localStorage.getString('user');
+          var user = json.decode(userJson);
+          showToast(varifyOtpResponse.message);
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => SettingProfile()),
+          );
+        } else {
+          String mobileNumber = userResponce['mobile_number'];
+          SharedPreferences localStorage =
+              await SharedPreferences.getInstance();
+          localStorage.setString('mobile', mobileNumber);
+          //String mobile = localStorage.getString('mobile');
+          showToast(varifyOtpResponse.message);
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => WelcomeScreen()),
+          );
+        }
       } else {
         showToast(varifyOtpResponse.message);
       }

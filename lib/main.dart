@@ -36,6 +36,16 @@ class _MyAppState extends State<MyApp> {
     super.initState();
   }
 
+  void _onLoading() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        });
+  }
+
   void _checkIfLoggedIn() async {
     //check if tocken is there
     SharedPreferences localStorage = await SharedPreferences.getInstance();
