@@ -63,10 +63,6 @@ class _ProfileBioState extends State<ProfileBio> {
                 ),
               ),
               Container(
-                alignment: Alignment.center,
-                child: Text(userlogindata.firstname),
-              ),
-              Container(
                 padding:
                     EdgeInsets.only(left: izDefultSpace, right: izDefultSpace),
                 child: TextField(

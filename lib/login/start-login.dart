@@ -1,3 +1,4 @@
+import 'package:IzingaDating/login/verify-number.dart';
 import 'package:flutter/material.dart';
 import '../constantColor.dart';
 
@@ -95,7 +96,11 @@ class StartLogin extends StatelessWidget {
                       width: 250,
                       child: RaisedButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, '/veryfy-number');
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => VeryfyNumber()),
+                          );
                         },
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(25.0),

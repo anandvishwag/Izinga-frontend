@@ -7,9 +7,9 @@ class CallApi {
     return await http.post(fullUrl, body: data, headers: _serHeaders());
   }
 
-  getData(apiUrl) async {
+  getData(apiUrl, headers) async {
     var fullUrl = _url + apiUrl;
-    return await http.post(fullUrl, headers: _serHeaders());
+    return await http.get(fullUrl, headers: headers);
   }
 
   _serHeaders() => {

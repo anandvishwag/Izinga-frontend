@@ -5,6 +5,7 @@ import 'package:IzingaDating/model/post_model.dart';
 import 'dart:io';
 
 String url = 'http://across.life2grow.com/api/send-otp';
+String posturl = 'http://across.life2grow.com/api/verify-otp';
 
 Future<List<PostNumber>> getAllPosts() async {
   final response = await http.get(url);
@@ -28,7 +29,7 @@ Future<http.Response> createPost(PostNumber post) async {
 }
 
 Future<http.Response> createPostOtp(PostOtp post) async {
-  final response = await http.post('$url',
+  final response = await http.post('$posturl',
       headers: {
         HttpHeaders.contentTypeHeader: 'application/json',
         HttpHeaders.authorizationHeader: ''
@@ -36,8 +37,6 @@ Future<http.Response> createPostOtp(PostOtp post) async {
       body: postToJsonOtp(post));
   return response;
 }
-
-
 
 //Future<Post> createPost(Post post) async{
 //  final response = await http.post('$url',

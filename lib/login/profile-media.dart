@@ -11,6 +11,8 @@ import '../top-back-appbar.dart';
 import 'loginConstructor/form-Heading-And-SubHeading.dart';
 import 'package:image_picker/image_picker.dart';
 import '../api/api.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import './setting.dart';
 
 class ProfileMedia extends StatefulWidget {
   final UserRegisterCompletedata userRegisterCompletedata;
@@ -67,7 +69,21 @@ class _ProfileMediaState extends State<ProfileMedia> {
     }
   }
 
+  void _onLoading() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        });
+  }
+
   _formSubmit() async {
+    _onLoading();
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+    String mobile = localStorage.getString('mobile');
+    // print("mobile number is $mobile");
     var data = jsonEncode({
       'firstname': userRegisterCompletedata.userLoginData.firstname,
       'lastname': userRegisterCompletedata.userLoginData.lastname,
@@ -76,12 +92,26 @@ class _ProfileMediaState extends State<ProfileMedia> {
       'gender': userRegisterCompletedata.userLoginData.gender,
       'intrested': userRegisterCompletedata.userLoginData.intrested,
       'bio': userRegisterCompletedata.tellypurself,
+      'email': userRegisterCompletedata.userLoginData.email,
+      'mobile': mobile,
       'image': base64Image,
       'image_name': fileName
     });
+
     var res = await CallApi().postData(data, '/resister');
     var body = jsonDecode(res.body);
-    print(body);
+
+    if (body['status'] == 'success') {
+      SharedPreferences localStorage = await SharedPreferences.getInstance();
+      localStorage.setString('token', body['token']);
+      localStorage.setString('user', json.encode(body['user_data']));
+      var userJson = localStorage.getString('user');
+      var user = json.decode(userJson);
+      print(user['email']);
+      Navigator.of(context).popUntil((route) => route.isFirst);
+      Navigator.pushReplacement(context,
+          new MaterialPageRoute(builder: (context) => SettingProfile()));
+    }
   }
 
   @override
@@ -112,9 +142,6 @@ class _ProfileMediaState extends State<ProfileMedia> {
                   subHeding: "Add some media to your profile",
                   headingColor: iZwhite,
                 ),
-              ),
-              Container(
-                child: Text(userRegisterCompletedata.userLoginData.firstname),
               ),
               Container(
                 margin: EdgeInsets.only(top: 15),

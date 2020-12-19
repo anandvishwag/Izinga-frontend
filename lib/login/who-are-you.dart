@@ -1,5 +1,6 @@
 import 'package:IzingaDating/constantColor.dart';
 import 'package:IzingaDating/datamodel/user_logindata.dart';
+import 'package:IzingaDating/datamodel/user_emaildata.dart';
 import 'package:IzingaDating/login/profile-bio.dart';
 // import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,8 +11,10 @@ import 'loginConstructor/form-Heading-And-SubHeading.dart';
 import 'loginConstructor/whoWeAreWidgets.dart';
 
 class WhoAreYou extends StatefulWidget {
+  final UserEmailData userEmail;
+  WhoAreYou(this.userEmail);
   @override
-  _WhoAreYouState createState() => _WhoAreYouState();
+  _WhoAreYouState createState() => _WhoAreYouState(userEmail: userEmail);
 }
 
 class _WhoAreYouState extends State<WhoAreYou> {
@@ -86,6 +89,9 @@ class _WhoAreYouState extends State<WhoAreYou> {
   int selectedIndex = 0;
   List<String> list = ['Women', 'Men', 'Both'];
   int secondIndex = 0;
+  final UserEmailData userEmail;
+  _WhoAreYouState({this.userEmail});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -349,7 +355,7 @@ class _WhoAreYouState extends State<WhoAreYou> {
                           validateDobField(dobController.text) &&
                           validateCityField(cityController.text) == true) {
                         showAllText(context, firstname, lastname, dateobirth,
-                            city, gender, intrested);
+                            city, gender, intrested, userEmail.email);
                       }
 
                       /* if (isNameValidate == true) {
@@ -433,14 +439,15 @@ class _WhoAreYouState extends State<WhoAreYou> {
 }
 
 void showAllText(BuildContext context, String firstname, String lastname,
-    String dob, String city, String gender, String intrested) {
+    String dob, String city, String gender, String intrested, String email) {
   final userlogindata = UserLoginData(
       firstname: firstname,
       lastname: lastname,
       dateobirth: dob,
       city: city,
       gender: gender,
-      intrested: intrested);
+      intrested: intrested,
+      email: email);
   Navigator.pushReplacement(
     context,
     MaterialPageRoute(

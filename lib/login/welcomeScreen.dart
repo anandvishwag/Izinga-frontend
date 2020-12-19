@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../constantColor.dart';
 import '../top-back-appbar.dart';
 import 'loginConstructor/bullLine.dart';
+import './email-form.dart';
 
 class WelcomeScreen extends StatefulWidget {
   @override
@@ -88,7 +89,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   width: 250,
                   child: RaisedButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, '/who-are-you');
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => EmailFormScreen()),
+                      );
                     },
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(25.0),
