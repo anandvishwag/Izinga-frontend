@@ -7,6 +7,11 @@ class CallApi {
     return await http.post(fullUrl, body: data, headers: _serHeaders());
   }
 
+  postAuthRoute(data, apiUrl, headers) async {
+    var fullUrl = _url + apiUrl;
+    return await http.post(fullUrl, body: data, headers: headers);
+  }
+
   getData(apiUrl, headers) async {
     var fullUrl = _url + apiUrl;
     return await http.get(fullUrl, headers: headers);
