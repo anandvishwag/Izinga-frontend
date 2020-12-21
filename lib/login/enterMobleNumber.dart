@@ -1,8 +1,9 @@
+import 'package:IzingaDating/login/otp-form.dart';
+import 'package:IzingaDating/model/postphoneresponse.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import '../constantColor.dart';
 
-import 'package:IzingaDating/model/postphoneresponse.dart';
 import 'package:IzingaDating/login/post_services.dart';
 import 'package:IzingaDating/model/post_model.dart';
 
@@ -12,7 +13,7 @@ class EnterMobileNumber extends StatefulWidget {
 }
 
 class _EnterMobileNumberState extends State<EnterMobileNumber> {
-  String phnumber, counrycodeNumber;
+  String phnumber, counrycodeNumber, getphonenumber;
   String showNumber = "", showCountryCode = "";
   int otpnumber = 0000;
   void shownumber() {
@@ -31,8 +32,15 @@ class _EnterMobileNumberState extends State<EnterMobileNumber> {
       if (response.statusCode == 200) {
         PostNumberResponse post1 = postResponseFromJson(response.body);
         otpnumber = post1.otp;
-        setState(() {});
-        print("$response.body     $otpnumber");
+        getphonenumber = post1.mobile_number;
+        setState(() {
+          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Otpform(mobilenumber: getphonenumber)),
+                          );
+        });
+        print("$getphonenumber    $otpnumber");
       } else
         print(response.statusCode);
     }).catchError((error) {
@@ -47,7 +55,7 @@ class _EnterMobileNumberState extends State<EnterMobileNumber> {
       child: Column(
         children: [
           Text(
-            'What is your phone number?',
+            'What is your phone number?$otpnumber',
             style: mobileLoginHeading,
             textAlign: TextAlign.left,
           ),
@@ -57,7 +65,7 @@ class _EnterMobileNumberState extends State<EnterMobileNumber> {
           IntlPhoneField(
             style: TextStyle(
               color: iZwhite,
-              fontSize: 25,
+              fontSize: 20,
             ),
             countryCodeTextColor: iZwhite,
             dropDownArrowColor: iZwhite,
@@ -65,13 +73,13 @@ class _EnterMobileNumberState extends State<EnterMobileNumber> {
               enabledBorder: UnderlineInputBorder(
                 borderSide: BorderSide(
                   color: iZwhite,
-                  width: 3,
+                  width: 1,
                 ),
               ),
               focusedBorder: UnderlineInputBorder(
                 borderSide: BorderSide(
                   color: iZgreenL3,
-                  width: 3,
+                  width: 1,
                 ),
               ),
             ),

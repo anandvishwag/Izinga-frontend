@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:IzingaDating/login/start-login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../constantColor.dart';
@@ -8,8 +11,9 @@ import 'package:form_field_validator/form_field_validator.dart';
 import 'package:http/http.dart' as http;
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
-
 import 'dart:io';
+import '../api/api.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingProfile extends StatefulWidget {
   @override
@@ -470,12 +474,10 @@ class _SettingProfileState extends State<SettingProfile> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 35),
-                  child: DefalteButton(
-                    'Logout',
-                    btTextColor: iZwhite,
-                    btColor: iZblue,
-                    onePress: () {},
-                  ),
+                  child: DefalteButton('Logout',
+                      btTextColor: iZwhite, btColor: iZblue, onePress: () {
+                    logout(context);
+                  }),
                 ),
               ],
             ),
@@ -545,5 +547,25 @@ class SettingHeading extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+void logout(BuildContext context) async {
+  //logout from the server
+  SharedPreferences localStorage = await SharedPreferences.getInstance();
+  var token = localStorage.getString('token');
+  var res = await CallApi().getData('/logout', {
+    'Content-type': 'application/json',
+    'Accept': 'application/json',
+    'Authorization': 'Bearer $token',
+  });
+  var body = jsonDecode(res.body);
+
+// claear the token../ user
+  if (body['status']) {
+    localStorage.remove('token');
+    localStorage.remove('user');
+    Navigator.push(
+        context, new MaterialPageRoute(builder: (context) => StartLogin()));
   }
 }

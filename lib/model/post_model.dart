@@ -47,7 +47,7 @@ class PostNumber {
 
   Map<String, dynamic> toJson() => {
         "mobile_number": mobile_number,
-         "country_code": country_code,
+        "country_code": country_code,
       };
 }
 
@@ -67,7 +67,29 @@ class PostOtp {
 
   Map<String, dynamic> toJson() => {
         "mobile_number": mobile_number,
-        "otp": mobile_number,
+        "otp": otp,
       };
 }
 
+VarifyOtpResponse getvarifyOtpFromJson(String str) {
+  final jsonData = json.decode(str);
+  return VarifyOtpResponse.fromJson(jsonData);
+}
+
+class VarifyOtpResponse {
+  final bool status;
+  final String message;
+
+  VarifyOtpResponse({this.status, this.message});
+
+  factory VarifyOtpResponse.fromJson(Map<String, dynamic> json) {
+    return VarifyOtpResponse(
+      status: json['status'],
+      message: json['message'],
+    );
+  }
+  Map<String, dynamic> toJson() => {
+        "status": status,
+        "message": message,
+      };
+}

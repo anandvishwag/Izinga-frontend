@@ -1,6 +1,5 @@
-import 'dart:io';
 import 'dart:convert';
-import 'package:http/http.dart' as http;
+import 'dart:io';
 import 'package:IzingaDating/datamodel/userlogin_completedata.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,28 +10,38 @@ import '../defalte-Button.dart';
 import '../top-back-appbar.dart';
 import 'loginConstructor/form-Heading-And-SubHeading.dart';
 import 'package:image_picker/image_picker.dart';
+import '../api/api.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import './setting.dart';
 
 class ProfileMedia extends StatefulWidget {
   final UserRegisterCompletedata userRegisterCompletedata;
   ProfileMedia({this.userRegisterCompletedata});
   @override
-  _ProfileMediaState createState() => _ProfileMediaState();
+  _ProfileMediaState createState() =>
+      _ProfileMediaState(userRegisterCompletedata);
 }
 
 class _ProfileMediaState extends State<ProfileMedia> {
+  final UserRegisterCompletedata userRegisterCompletedata;
+  _ProfileMediaState(this.userRegisterCompletedata);
   File _image;
-  final picker = ImagePicker();
+  bool _isDesabled = true;
+  String base64Image = '';
+  String fileName = '';
+  //final picker = ImagePicker();
   _getImage(ImageSource source) async {
-    final pickedFile = await picker.getImage(source: source);
+    _image = await ImagePicker.pickImage(source: source);
 
     setState(() {
-      if (pickedFile != null) {
+      if (_image != null) {
         // _image = File(pickedFile.path);
-        _cropImage(pickedFile.path);
+        _cropImage(_image.path);
       } else {
         print('No image selected.');
       }
     });
+
     Navigator.pop(context);
   }
 
@@ -47,10 +56,61 @@ class _ProfileMediaState extends State<ProfileMedia> {
       aspectRatio: CropAspectRatio(ratioX: 1.0, ratioY: 1.0),
     );
     if (cropped != null) {
+      base64Image = base64Encode(cropped.readAsBytesSync());
+      fileName = cropped.path.split("/").last;
+      //print(base64Image);
+      //print(fileName);
+
       setState(() {
-        _image = cropped;
+        base64Image = base64Image;
+        fileName = fileName;
+        _isDesabled = false;
       });
-      print(_image);
+    }
+  }
+
+  void _onLoading() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        });
+  }
+
+  _formSubmit() async {
+    _onLoading();
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+    String mobile = localStorage.getString('mobile');
+    // print("mobile number is $mobile");
+    var data = jsonEncode({
+      'firstname': userRegisterCompletedata.userLoginData.firstname,
+      'lastname': userRegisterCompletedata.userLoginData.lastname,
+      'dateobirth': userRegisterCompletedata.userLoginData.dateobirth,
+      'city': userRegisterCompletedata.userLoginData.city,
+      'gender': userRegisterCompletedata.userLoginData.gender,
+      'intrested': userRegisterCompletedata.userLoginData.intrested,
+      'bio': userRegisterCompletedata.tellypurself,
+      'email': userRegisterCompletedata.userLoginData.email,
+      'mobile': mobile,
+      'image': base64Image,
+      'image_name': fileName
+    });
+
+    var res = await CallApi().postData(data, '/resister');
+    var body = jsonDecode(res.body);
+
+    if (body['status'] == 'success') {
+      SharedPreferences localStorage = await SharedPreferences.getInstance();
+      localStorage.setString('token', body['token']);
+      localStorage.setString('user', json.encode(body['user_data']));
+      var userJson = localStorage.getString('user');
+      var user = json.decode(userJson);
+      print(user['email']);
+      Navigator.of(context).popUntil((route) => route.isFirst);
+      Navigator.pushReplacement(context,
+          new MaterialPageRoute(builder: (context) => SettingProfile()));
     }
   }
 
@@ -135,7 +195,7 @@ class _ProfileMediaState extends State<ProfileMedia> {
                 margin: EdgeInsets.only(bottom: izDefultSpace),
                 child: DefalteButton(
                   'Finish',
-                  onePress: () {},
+                  onePress: _isDesabled ? null : _formSubmit,
                   btTextColor: iZblue,
                 ),
               ),

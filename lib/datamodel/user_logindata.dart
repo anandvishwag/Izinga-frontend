@@ -1,3 +1,5 @@
+import 'package:IzingaDating/datamodel/user_emaildata.dart';
+
 class UserLoginData {
   String firstname;
   String lastname;
@@ -5,5 +7,14 @@ class UserLoginData {
   String city;
   String gender;
   String intrested;
-  UserLoginData({this.firstname, this.lastname,this.dateobirth,this.city,this.gender,this.intrested});
+  String email;
+
+  UserLoginData(
+      {this.firstname,
+      this.lastname,
+      this.dateobirth,
+      this.city,
+      this.gender,
+      this.intrested,
+      this.email});
 }
