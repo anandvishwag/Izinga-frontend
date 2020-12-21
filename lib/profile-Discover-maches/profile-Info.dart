@@ -12,12 +12,11 @@ class ProfileInfo extends StatefulWidget {
 
 class _ProfileInfoState extends State<ProfileInfo> {
   int _current = 0;
-  List imgList = [
-    'https://images.unsplash.com/photo-1603400901809-428fc7789849?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=639&q=80',
-    'https://images.unsplash.com/photo-1603923956247-10a0e3882fea?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=1868&q=80',
-    'https://images.unsplash.com/photo-1604961410267-9f76682d25e9?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=638&q=80',
-    'https://images.unsplash.com/photo-1605993439219-9d09d2020fa5?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1868&q=80'
- 
+   List imgList = [
+    'assets/img/img1.jpg',
+     'assets/img/img2.jpg',
+      'assets/img/img3.jpg',
+       'assets/img/img4.jpg'
   ];
   @override
   Widget build(BuildContext context) {
@@ -60,7 +59,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
                                 ),
                                 child: ClipRRect(
                                     borderRadius: BorderRadius.circular(10.0),
-                                    child: Image.network(
+                                    child: Image.asset(
                                       item,
                                       fit: BoxFit.cover,
                                       alignment: Alignment.topCenter,
